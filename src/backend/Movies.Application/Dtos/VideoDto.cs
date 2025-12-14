@@ -1,0 +1,33 @@
+using System.Text.Json.Serialization;
+
+namespace Movies.Application.Dtos;
+
+public class VideoResponseDto
+{
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+    
+    [JsonPropertyName("results")]
+    public List<VideoDto> Results { get; set; } = new();
+}
+
+public class VideoDto
+{
+    [JsonPropertyName("id")]
+    public string Id { get; set; } = string.Empty;
+    
+    [JsonPropertyName("key")]
+    public string Key { get; set; } = string.Empty;
+    
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = string.Empty;
+    
+    [JsonPropertyName("site")]
+    public string Site { get; set; } = string.Empty;
+    
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = string.Empty;
+    
+    [JsonPropertyName("official")]
+    public bool Official { get; set; }
+}
