@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, IconButton, Chip, useTheme } from '@mui/material';
+import { Box, Typography, IconButton, Chip, useTheme, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -15,9 +15,12 @@ interface MovieCarouselProps {
 
 const MovieCarousel: React.FC<MovieCarouselProps> = ({ movies, interval = 6000 }) => {
   const [current, setCurrent] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
   const next = () =>
     setCurrent((prev) => (prev + 1) % movies.length);
@@ -64,6 +67,18 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ movies, interval = 6000 }
           overflow: 'hidden',
           borderRadius: '16px',
           boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
+        }}
+        onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
+        onTouchMove={(e) => setTouchEnd(e.targetTouches[0].clientX)}
+        onTouchEnd={() => {
+          if (!touchStart || !touchEnd) return;
+          const distance = touchStart - touchEnd;
+          const isLeftSwipe = distance > 50;
+          const isRightSwipe = distance < -50;
+          if (isLeftSwipe) next();
+          if (isRightSwipe) prev();
+          setTouchStart(null);
+          setTouchEnd(null);
         }}
       >
         {movies.map((movie, index) => {
@@ -178,49 +193,52 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ movies, interval = 6000 }
           );
         })}
 
-        <IconButton
-          className="nav left"
-          onClick={prev}
-          sx={{
-            position: 'absolute',
-            left: { xs: 20, md: 32 },
-            top: '50%',
-            transform: 'translateY(-50%)',
-            zIndex: 2,
-            bgcolor: 'rgba(0, 0, 0, 0.7)',
-            color: 'white',
-            '&:hover': {
-              bgcolor: 'rgba(0, 0, 0, 0.9)',
-              color: 'primary.main',
-            },
-            width: 40,
-            height: 40,
-          }}
-        >
-          <ChevronLeftIcon />
-        </IconButton>
-
-        <IconButton
-          className="nav right"
-          onClick={next}
-          sx={{
-            position: 'absolute',
-            right: { xs: 20, md: 32 },
-            top: '50%',
-            transform: 'translateY(-50%)',
-            zIndex: 2,
-            bgcolor: 'rgba(0, 0, 0, 0.7)',
-            color: 'white',
-            '&:hover': {
-              bgcolor: 'rgba(0, 0, 0, 0.9)',
-              color: 'primary.main',
-            },
-            width: 40,
-            height: 40,
-          }}
-        >
-          <ChevronRightIcon />
-        </IconButton>
+        {isDesktop && (
+          <IconButton
+            className="nav left"
+            onClick={prev}
+            sx={{
+              position: 'absolute',
+              left: { xs: 20, md: 32 },
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 2,
+              bgcolor: 'rgba(0, 0, 0, 0.7)',
+              color: 'white',
+              '&:hover': {
+                bgcolor: 'rgba(0, 0, 0, 0.9)',
+                color: 'primary.main',
+              },
+              width: 40,
+              height: 40,
+            }}
+          >
+            <ChevronLeftIcon />
+          </IconButton>
+        )}
+        {isDesktop && (
+          <IconButton
+            className="nav right"
+            onClick={next}
+            sx={{
+              position: 'absolute',
+              right: { xs: 20, md: 32 },
+              top: '50%',
+              transform: 'translateY(-50%)',
+              zIndex: 2,
+              bgcolor: 'rgba(0, 0, 0, 0.7)',
+              color: 'white',
+              '&:hover': {
+                bgcolor: 'rgba(0, 0, 0, 0.9)',
+                color: 'primary.main',
+              },
+              width: 40,
+              height: 40,
+            }}
+          >
+            <ChevronRightIcon />
+          </IconButton>
+        )}
 
         <Box
           className="dots"
