@@ -154,7 +154,7 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ movies, interval = 6000 }
                     lineHeight: 1.1,
                   }}
                 >
-                  {movie.title}
+                  {movie.title.length > 130 ? movie.title.substring(0, 130) + '...' : movie.title}
                 </Typography>
 
                 <Typography
@@ -168,7 +168,14 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ movies, interval = 6000 }
                     maxWidth: '600px',
                   }}
                 >
-                  {movie.overview ? movie.overview.substring(0, 200) + '...' : 'Sinopse não disponível'}
+                  {(() => {
+                    const maxTotal = 130;
+                    const titleLength = movie.title.length > 130 ? 130 : movie.title.length;
+                    const maxOverview = maxTotal - titleLength;
+                    if (!movie.overview) return 'Sinopse não disponível';
+                    if (movie.overview.length <= maxOverview) return movie.overview;
+                    return movie.overview.substring(0, maxOverview) + '...';
+                  })()}
                 </Typography>
 
                 <IconButton
