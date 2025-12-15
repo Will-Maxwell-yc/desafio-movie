@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, IconButton, Chip, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useAuth } from '../../context/AuthContext';
 import { Movie } from '../../types';
 import { TMDB_IMAGE_BASE_URL_ORIGINAL } from '../../utils/constants';
@@ -184,23 +186,18 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ movies, interval = 6000 }
             left: { xs: 20, md: 32 },
             top: '50%',
             transform: 'translateY(-50%)',
-            fontSize: '3rem',
-            backgroundColor: 'rgba(156, 39, 176, 0.3)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255,255,255,0.2)',
+            zIndex: 2,
+            bgcolor: 'rgba(0, 0, 0, 0.7)',
             color: 'white',
-            width: 60,
-            height: 60,
-            boxShadow: '0 4px 12px rgba(156, 39, 176, 0.3)',
             '&:hover': {
-              backgroundColor: 'rgba(156, 39, 176, 0.4)',
-              boxShadow: '0 6px 16px rgba(156, 39, 176, 0.4)',
+              bgcolor: 'rgba(0, 0, 0, 0.9)',
+              color: 'primary.main',
             },
-            transition: 'all 0.3s ease',
-            zIndex: 10,
+            width: 40,
+            height: 40,
           }}
         >
-          ‹
+          <ChevronLeftIcon />
         </IconButton>
 
         <IconButton
@@ -211,23 +208,18 @@ const MovieCarousel: React.FC<MovieCarouselProps> = ({ movies, interval = 6000 }
             right: { xs: 20, md: 32 },
             top: '50%',
             transform: 'translateY(-50%)',
-            fontSize: '3rem',
-            backgroundColor: 'rgba(156, 39, 176, 0.3)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255,255,255,0.2)',
+            zIndex: 2,
+            bgcolor: 'rgba(0, 0, 0, 0.7)',
             color: 'white',
-            width: 60,
-            height: 60,
-            boxShadow: '0 4px 12px rgba(156, 39, 176, 0.3)',
             '&:hover': {
-              backgroundColor: 'rgba(156, 39, 176, 0.4)',
-              boxShadow: '0 6px 16px rgba(156, 39, 176, 0.4)',
+              bgcolor: 'rgba(0, 0, 0, 0.9)',
+              color: 'primary.main',
             },
-            transition: 'all 0.3s ease',
-            zIndex: 10,
+            width: 40,
+            height: 40,
           }}
         >
-          ›
+          <ChevronRightIcon />
         </IconButton>
 
         <Box
